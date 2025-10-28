@@ -1,84 +1,65 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useTaskStore } from '@/store/taskStore'
-import { TaskCard } from '../components/TaskCard'
-import { CreateTaskModal } from '../components/CreateTaskModal'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Search, Filter } from 'lucide-react'
+import { useProjectStore } from '@/store/projectStore'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Calendar, MoreVertical } from 'lucide-react'
+import { format } from 'date-fns'
 
-export default function TasksPage() {
-  const { tasks, loadTasks } = useTaskStore()
-  const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState('all')
-
-  useEffect(() => {
-    loadTasks()
-  }, [loadTasks])
-
-  const filteredTasks = tasks.filter(task => {
-    const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         task.description?.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === 'all' || task.status === statusFilter
-    return matchesSearch && matchesStatus
-  })
+export function ProjectList() {
+  const { projects } = useProjectStore()
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">All Tasks</h1>
-        <CreateTaskModal />
-      </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {projects.map((project) => (
+        <Card key={project.id} className="hover:shadow-lg transition-shadow">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-lg font-semibold">
+              {project.name}
+            </CardTitle>
+            <button className="p-1 hover:bg-gray-100 rounded" title="Project options"
+>
+              <MoreVertical className="w-4 h-4" />
+            </button>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+              {project.description || 'No description'}
+            </p>
+            
+            <div className="flex items-center justify-between text-sm text-gray-500">
+              <div className="flex items-center space-x-1">
+                <Calendar className="w-4 h-4" />
+                {project.startDate && (
+                  <span>{format(new Date(project.startDate), 'MMM dd')}</span>
+                )}
+              </div>
+              
+              <Badge 
+                variant={
+                  project.status === 'ACTIVE' ? 'default' : 
+                  project.status === 'COMPLETED' ? 'secondary' : 'outline'
+                }
+              >
+                {project.status.toLowerCase()}
+              </Badge>
+            </div>
 
-      {/* Filters */}
-      <div className="flex space-x-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-          <Input
-            placeholder="Search tasks..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-40">
-            <Filter className="w-4 h-4 mr-2" />
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="TODO">To Do</SelectItem>
-            <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-            <SelectItem value="REVIEW">Review</SelectItem>
-            <SelectItem value="DONE">Done</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Tasks Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredTasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            onDragStart={() => {}}
-          />
-        ))}
-      </div>
-
-      {filteredTasks.length === 0 && (
-        <div className="text-center py-12">
-          <div className="text-gray-400 text-lg">No tasks found</div>
-          <p className="text-gray-500 mt-2">
-            {searchTerm || statusFilter !== 'all' 
-              ? 'Try adjusting your filters' 
-              : 'Create your first task to get started'}
-          </p>
-        </div>
-      )}
+            <div className="mt-4 flex items-center justify-between">
+              <div className="flex items-center space-x-2 text-sm">
+                <span className="text-gray-600">
+                  {project.tasks?.length || 0} tasks
+                </span>
+              </div>
+              
+              <div 
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: project.color || '#3b82f6' }}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   )
 }

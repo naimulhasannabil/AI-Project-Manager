@@ -1,9 +1,12 @@
-import { authMiddleware } from "@clerk/nextjs/server";
+// middleware.ts
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
-export default authMiddleware({
-  publicRoutes: ["/", "/api/webhook"],
-});
+export default clerkMiddleware();
 
+// Optional route matcher
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: [
+    // Protect everything except static files and the homepage
+    "/((?!_next|.*\\..*|favicon.ico).*)",
+  ],
 };

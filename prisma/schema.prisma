@@ -8,107 +8,100 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  clerkId   String   @unique
-  email     String   @unique
-  name      String?
-  avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  projects Project[]
-  ownedTasks Task[] @relation("TaskOwner") // tasks where user is the owner
-  assignedTasks Task[] @relation("TaskAssignee") // tasks where user is the assignee
-  teams    TeamUser[]
-  comments Comment[]
+  id            String     @id @default(cuid())
+  clerkId       String     @unique
+  email         String     @unique
+  name          String?
+  avatar        String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  comments      Comment[]
+  projects      Project[]
+  assignedTasks Task[]     @relation("TaskAssignee")
+  ownedTasks    Task[]     @relation("TaskOwner")
+  teams         TeamUser[]
 
   @@map("users")
 }
 
 model Team {
-  id          String   @id @default(cuid())
+  id          String     @id @default(cuid())
   name        String
   description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  members TeamUser[]
-  projects Project[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  projects    Project[]
+  members     TeamUser[]
 
   @@map("teams")
 }
 
 model TeamUser {
-  id     String @id @default(cuid())
+  id     String   @id @default(cuid())
   teamId String
   userId String
   role   TeamRole @default(MEMBER)
-
-  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team   Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([teamId, userId])
   @@map("team_users")
 }
 
 model Project {
-  id          String   @id @default(cuid())
+  id          String        @id @default(cuid())
   name        String
   description String?
-  color       String?  @default("#3b82f6")
+  color       String?       @default("#3b82f6")
   startDate   DateTime?
   endDate     DateTime?
   status      ProjectStatus @default(ACTIVE)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  userId    String
-  teamId    String?
-  user      User     @relation(fields: [userId], references: [id])
-  team      Team?    @relation(fields: [teamId], references: [id])
-  tasks     Task[]
-  aiInsights AIInsight[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  userId      String
+  teamId      String?
+  aiInsights  AIInsight[]
+  team        Team?         @relation(fields: [teamId], references: [id])
+  user        User          @relation(fields: [userId], references: [id])
+  tasks       Task[]
 
   @@map("projects")
 }
 
 model Task {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  status      TaskStatus @default(TODO)
-  priority    TaskPriority @default(MEDIUM)
-  dueDate     DateTime?
+  id             String         @id @default(cuid())
+  title          String
+  description    String?
+  status         TaskStatus     @default(TODO)
+  priority       TaskPriority   @default(MEDIUM)
+  dueDate        DateTime?
   estimatedHours Float?
-  actualHours Float?
-  position    Float
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  userId    String
-  projectId String
-  assigneeId String?
-
-  user      User     @relation(name: "TaskOwner", fields: [userId], references: [id])
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  assignee  User?    @relation(name: "TaskAssignee", fields: [assigneeId], references: [id])
-  subtasks  Subtask[]
-  comments  Comment[]
-  aiSuggestions AISuggestion[]
+  actualHours    Float?
+  position       Float
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  userId         String
+  projectId      String
+  assigneeId     String?
+  aiSuggestions  AISuggestion[]
+  comments       Comment[]
+  subtasks       Subtask[]
+  assignee       User?          @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  project        Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user           User           @relation("TaskOwner", fields: [userId], references: [id])
 
   @@map("tasks")
 }
 
 model Subtask {
-  id          String   @id @default(cuid())
-  title       String
-  completed   Boolean  @default(false)
-  position    Float
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  taskId String
-  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  title     String
+  completed Boolean  @default(false)
+  position  Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
 
   @@map("subtasks")
 }
@@ -118,39 +111,35 @@ model Comment {
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  userId  String
-  taskId  String
-
-  user User @relation(fields: [userId], references: [id])
-  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId    String
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
 
   @@map("comments")
 }
 
 model AIInsight {
-  id        String   @id @default(cuid())
+  id        String        @id @default(cuid())
   type      AIInsightType
   content   String
   data      Json?
-  createdAt DateTime @default(now())
-
+  createdAt DateTime      @default(now())
   projectId String
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project   Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@map("ai_insights")
 }
 
 model AISuggestion {
-  id        String   @id @default(cuid())
+  id        String           @id @default(cuid())
   type      AISuggestionType
   content   String
   data      Json?
-  applied   Boolean  @default(false)
-  createdAt DateTime @default(now())
-
-  taskId String
-  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  applied   Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  taskId    String
+  task      Task             @relation(fields: [taskId], references: [id], onDelete: Cascade)
 
   @@map("ai_suggestions")
 }
