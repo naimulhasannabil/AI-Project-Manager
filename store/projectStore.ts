@@ -10,6 +10,7 @@ interface ProjectStore {
   updateProject: (projectId: string, updates: Partial<Project>) => Promise<void>
   deleteProject: (projectId: string) => Promise<void>
   setSelectedProject: (project: Project | null) => void
+  generateAISummary: (projectId: string) => Promise<unknown>
 }
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
@@ -21,6 +22,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     set({ isLoading: true })
     try {
       const response = await fetch('/api/projects')
+      if (!response.ok) throw new Error('Failed to fetch projects')
       const projects = await response.json()
       set({ projects, isLoading: false })
     } catch (error) {
@@ -36,10 +38,13 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(projectData),
       })
+      if (!response.ok) throw new Error('Failed to create project')
       const newProject = await response.json()
       set((state) => ({ projects: [...state.projects, newProject] }))
+      return newProject
     } catch (error) {
       console.error('Failed to create project:', error)
+      throw error
     }
   },
 
@@ -50,6 +55,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
       })
+      if (!response.ok) throw new Error('Failed to update project')
       const updatedProject = await response.json()
       
       set((state) => ({
@@ -58,16 +64,19 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         ),
         selectedProject: state.selectedProject?.id === projectId ? updatedProject : state.selectedProject,
       }))
+      return updatedProject
     } catch (error) {
       console.error('Failed to update project:', error)
+      throw error
     }
   },
 
   deleteProject: async (projectId: string) => {
     try {
-      await fetch(`/api/projects/${projectId}`, {
+      const response = await fetch(`/api/projects/${projectId}`, {
         method: 'DELETE',
       })
+      if (!response.ok) throw new Error('Failed to delete project')
       
       set((state) => ({
         projects: state.projects.filter((project) => project.id !== projectId),
@@ -75,10 +84,26 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       }))
     } catch (error) {
       console.error('Failed to delete project:', error)
+      throw error
     }
   },
 
   setSelectedProject: (project: Project | null) => {
     set({ selectedProject: project })
+  },
+
+  generateAISummary: async (projectId: string) => {
+    try {
+      const response = await fetch('/api/ai/summarize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectId }),
+      })
+      if (!response.ok) throw new Error('Failed to generate summary')
+      return await response.json()
+    } catch (error) {
+      console.error('Failed to generate AI summary:', error)
+      throw error
+    }
   },
 }))

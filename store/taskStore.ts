@@ -43,6 +43,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       if (!response.ok) throw new Error('Failed to create task')
       const newTask = await response.json()
       set((state) => ({ tasks: [...state.tasks, newTask] }))
+      return newTask
     } catch (error) {
       console.error('Failed to create task:', error)
       throw error
@@ -64,6 +65,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
           task.id === taskId ? updatedTask : task
         ),
       }))
+      return updatedTask
     } catch (error) {
       console.error('Failed to update task status:', error)
       throw error
@@ -86,6 +88,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         ),
         selectedTask: state.selectedTask?.id === taskId ? updatedTask : state.selectedTask,
       }))
+      return updatedTask
     } catch (error) {
       console.error('Failed to update task:', error)
       throw error
