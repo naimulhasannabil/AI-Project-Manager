@@ -1,5 +1,6 @@
 import { Sidebar } from './components/Sidebar'
 import { Header } from './components/Header'
+import { AIHelper } from './components/AIHelper'
 
 export default function DashboardLayout({
   children,
@@ -7,7 +8,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-gray-50">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />
@@ -15,6 +16,7 @@ export default function DashboardLayout({
           {children}
         </main>
       </div>
+      <AIHelper />
     </div>
   )
 }
