@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  LayoutDashboard,
-  CheckSquare,
-  Folder,
-  BarChart3,
+import { 
+  LayoutDashboard, 
+  CheckSquare, 
+  Folder, 
+  BarChart3, 
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -18,23 +18,23 @@ import {
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useUser } from '@clerk/nextjs' 
+import { useUser } from '@clerk/nextjs'
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, color: 'text-blue-600' },
-  { name: 'Projects', href: '/dashboard/projects', icon: Folder, color: 'text-green-600' },
-  { name: 'Tasks', href: '/dashboard/tasks', icon: CheckSquare, color: 'text-orange-600' },
-  { name: 'Calendar', href: '/dashboard/calendar', icon: Calendar, color: 'text-red-600' },
-  { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3, color: 'text-purple-600' },
-  { name: 'Team', href: '/dashboard/team', icon: Users, color: 'text-indigo-600' },
-  { name: 'Settings', href: '/dashboard/settings', icon: Settings, color: 'text-gray-600' },
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, color: 'text-blue-600 dark:text-blue-400' },
+  { name: 'Projects', href: '/dashboard/projects', icon: Folder, color: 'text-green-600 dark:text-green-400' },
+  { name: 'Tasks', href: '/dashboard/tasks', icon: CheckSquare, color: 'text-orange-600 dark:text-orange-400' },
+  { name: 'Calendar', href: '/dashboard/calendar', icon: Calendar, color: 'text-red-600 dark:text-red-400' },
+  { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3, color: 'text-purple-600 dark:text-purple-400' },
+  { name: 'Team', href: '/dashboard/team', icon: Users, color: 'text-indigo-600 dark:text-indigo-400' },
+  { name: 'Settings', href: '/dashboard/settings', icon: Settings, color: 'text-gray-600 dark:text-gray-400' },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
+  const { user } = useUser()
   const [collapsed, setCollapsed] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const { user } = useUser()
 
   useEffect(() => {
     const checkMobile = () => {
@@ -43,7 +43,7 @@ export function Sidebar() {
         setCollapsed(true)
       }
     }
-
+    
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
