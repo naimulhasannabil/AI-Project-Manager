@@ -70,3 +70,15 @@ export interface AIInsight {
   projectId: string
   createdAt: Date
 }
+
+export type CreateTaskInput = {
+  title: string
+  description?: string | null
+  status: 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE'
+  priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+  estimatedHours?: number | null
+  dueDate?: Date | null
+  projectId: string
+  userId: string
+  assigneeId?: string | null
+}
