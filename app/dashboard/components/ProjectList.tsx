@@ -9,6 +9,10 @@ import { format } from 'date-fns'
 export function ProjectList() {
   const { projects } = useProjectStore()
 
+  function hasTasks(obj: unknown): obj is { tasks: unknown[] } {
+    return typeof obj === 'object' && obj !== null && Array.isArray((obj as Record<string, unknown>)['tasks'])
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {projects.map((project) => (
@@ -47,15 +51,13 @@ export function ProjectList() {
 
             <div className="mt-4 flex items-center justify-between">
               <div className="flex items-center space-x-2 text-sm">
-                <span className="text-gray-600">
-                  {project.tasks?.length || 0} tasks
+                <span className="text-gray-600 dark:text-gray-300">
+                  {hasTasks(project) ? project.tasks.length : 0} tasks
                 </span>
               </div>
-              
-              <div 
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: project.color || '#3b82f6' }}
-              />
+
+              {/* project color dot - use theme primary color for now to avoid inline styles */}
+              <div className="w-3 h-3 rounded-full border border-border bg-primary" aria-hidden />
             </div>
           </CardContent>
         </Card>

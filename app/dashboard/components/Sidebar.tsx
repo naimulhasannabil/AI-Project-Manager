@@ -34,11 +34,9 @@ export function Sidebar() {
   const pathname = usePathname()
   const { user } = useUser()
   const [collapsed, setCollapsed] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024)
       if (window.innerWidth < 1024) {
         setCollapsed(true)
       }
@@ -128,7 +126,7 @@ export function Sidebar() {
               {isActive && !collapsed && (
                 <motion.div
                   layoutId="activeIndicator"
-                  className="ml-auto w-2 h-2 bg-white rounded-full"
+                  className="ml-auto w-2 h-2 bg-white dark:bg-gray-200 rounded-full"
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 />
               )}

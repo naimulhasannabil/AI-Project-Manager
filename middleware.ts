@@ -1,12 +1,25 @@
-// middleware.ts
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export default clerkMiddleware();
+// Handle theme persistence middleware
+export function middleware(req: NextRequest) {
+  const response = NextResponse.next();
+  
+  // Handle theme persistence
+  const theme = req.cookies.get('theme')?.value || 'system';
+  if (!req.cookies.has('theme')) {
+    response.cookies.set('theme', theme, {
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production'
+    });
+  }
 
-// Optional route matcher
+  return response;
+}
+
 export const config = {
   matcher: [
-    // Protect everything except static files and the homepage
-    "/((?!_next|.*\\..*|favicon.ico).*)",
+    // Only run on specific paths where we want to persist theme
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 };
