@@ -1,25 +1,13 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
-// Handle theme persistence middleware
-export function middleware(req: NextRequest) {
-  const response = NextResponse.next();
-  
-  // Handle theme persistence
-  const theme = req.cookies.get('theme')?.value || 'system';
-  if (!req.cookies.has('theme')) {
-    response.cookies.set('theme', theme, {
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production'
-    });
-  }
+// Export the Clerk middleware with default configuration
+// This will protect all routes and handle authentication
+export default clerkMiddleware({});
 
-  return response;
-}
-
+// Stop Middleware running on static files but enable on API routes
 export const config = {
   matcher: [
-    // Only run on specific paths where we want to persist theme
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+    '/api/:path*'
   ],
 };

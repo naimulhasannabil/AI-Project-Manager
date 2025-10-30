@@ -6,12 +6,18 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { useState } from 'react'
-import { Save, Bell, Shield, User, Palette } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Save, Bell, Shield, User, Palette, Check } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { useUser } from '@clerk/nextjs'
 
 export default function SettingsPage() {
+  const { theme: currentTheme, setTheme } = useTheme()
+  const { user } = useUser()
+  const [showSaveSuccess, setShowSaveSuccess] = useState(false)
+  
   const [settings, setSettings] = useState({
-    theme: 'light',
+    theme: currentTheme || 'system',
     notifications: true,
     emailUpdates: true,
     twoFactor: false,
@@ -19,9 +25,32 @@ export default function SettingsPage() {
     timezone: 'UTC'
   })
 
+  // Load saved settings from localStorage on mount
+  useEffect(() => {
+    const savedSettings = localStorage.getItem(`user-settings-${user?.id}`)
+    if (savedSettings) {
+      const parsed = JSON.parse(savedSettings)
+      setSettings(prev => ({ ...prev, ...parsed }))
+    }
+  }, [user?.id])
+
+  // Update theme when settings.theme changes
+  useEffect(() => {
+    setTheme(settings.theme)
+  }, [settings.theme, setTheme])
+
   const handleSave = () => {
-    // Save settings logic here
-    console.log('Settings saved:', settings)
+    // Save theme using next-themes
+    setTheme(settings.theme)
+    
+    // Save other settings to localStorage
+    if (user?.id) {
+      localStorage.setItem(`user-settings-${user.id}`, JSON.stringify(settings))
+    }
+
+    // Show success message
+    setShowSaveSuccess(true)
+    setTimeout(() => setShowSaveSuccess(false), 3000)
   }
 
   return (
@@ -33,9 +62,25 @@ export default function SettingsPage() {
             Manage your account settings and preferences
           </p>
         </div>
-        <Button onClick={handleSave} className="bg-gradient-to-r from-blue-600 to-purple-600">
-          <Save className="w-4 h-4 mr-2" />
-          Save Changes
+        <Button 
+          onClick={handleSave} 
+          className={`transition-all duration-300 ${
+            showSaveSuccess 
+              ? 'bg-green-600 hover:bg-green-700' 
+              : 'bg-gradient-to-r from-blue-600 to-purple-600'
+          }`}
+        >
+          {showSaveSuccess ? (
+            <>
+              <Check className="w-4 h-4 mr-2" />
+              Saved!
+            </>
+          ) : (
+            <>
+              <Save className="w-4 h-4 mr-2" />
+              Save Changes
+            </>
+          )}
         </Button>
       </div>
 
