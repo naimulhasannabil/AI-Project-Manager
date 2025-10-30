@@ -2,12 +2,9 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Calendar as CalendarIcon, Plus, Clock, Users } from 'lucide-react'
-import { useState } from 'react'
+import { Calendar as CalendarIcon, Plus, Clock } from 'lucide-react'
 
 export default function CalendarPage() {
-  const [selectedDate, setSelectedDate] = useState(new Date())
-
   // Mock calendar events
   const events = [
     {

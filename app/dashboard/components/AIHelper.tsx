@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Bot } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import './AIHelper.css'
 
 interface Message {
   id: string
@@ -117,9 +118,9 @@ export function AIHelper() {
                 <div className="flex justify-start">
                   <div className="bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm">
                     <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" />
-                      <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                      <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                      <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full dot-bounce-1" />
+                      <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full dot-bounce-2" />
+                      <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full dot-bounce-3" />
                     </div>
                   </div>
                 </div>

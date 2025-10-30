@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest } from 'next/server'
 import { getAuth } from '@clerk/nextjs/server'
 import { OpenAI } from 'openai'
 
@@ -11,10 +11,10 @@ export async function POST(request: NextRequest) {
     const { userId } = getAuth(request)
     
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { prompt, projectId } = await request.json()
+    const { prompt } = await request.json()
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4",
@@ -34,10 +34,10 @@ export async function POST(request: NextRequest) {
 
     const tasks = JSON.parse(completion.choices[0].message.content || '{}').tasks
 
-    return NextResponse.json({ tasks })
+    return Response.json({ tasks })
   } catch (error) {
     console.error('AI task generation failed:', error)
-    return NextResponse.json(
+    return Response.json(
       { error: 'Failed to generate tasks' },
       { status: 500 }
     )

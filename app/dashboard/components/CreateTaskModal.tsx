@@ -38,7 +38,7 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
 
   setIsLoading(true)
   try {
-    const payload: CreateTaskInput = {
+    const payload = {
   title: formData.title,
   description: formData.description || null,
   status: formData.status,
@@ -51,6 +51,8 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
   projectId: 'default-project',
   userId: 'current-user',
   assigneeId: null,
+  actualHours: null,
+  position: 0,
 }
 
 await createTask(payload)

@@ -1,16 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest } from 'next/server'
 import { getAuth } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 
+interface RouteParams {
+  params: { id: string }
+}
+
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
     const { userId } = getAuth(request)
     
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const body = await request.json()
@@ -37,10 +41,10 @@ export async function PATCH(
       },
     })
 
-    return NextResponse.json(task)
+    return Response.json(task)
   } catch (error) {
     console.error('Failed to update task:', error)
-    return NextResponse.json(
+    return Response.json(
       { error: 'Failed to update task' },
       { status: 500 }
     )
@@ -49,13 +53,13 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: RouteParams
 ) {
   try {
     const { userId } = getAuth(request)
     
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     await prisma.task.delete({
@@ -65,10 +69,10 @@ export async function DELETE(
       },
     })
 
-    return NextResponse.json({ success: true })
+    return Response.json({ success: true })
   } catch (error) {
     console.error('Failed to delete task:', error)
-    return NextResponse.json(
+    return Response.json(
       { error: 'Failed to delete task' },
       { status: 500 }
     )

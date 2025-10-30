@@ -1,0 +1,23 @@
+.dot-bounce-1 {
+  animation: bounce 1s infinite;
+}
+
+.dot-bounce-2 {
+  animation: bounce 1s infinite;
+  animation-delay: 0.1s;
+}
+
+.dot-bounce-3 {
+  animation: bounce 1s infinite;
+  animation-delay: 0.2s;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}

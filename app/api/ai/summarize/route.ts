@@ -1,5 +1,5 @@
 // app/api/ai/summarize/route.ts
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest } from 'next/server'
 import { getAuth } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 import { OpenAI } from 'openai'
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     const { userId } = getAuth(request)
     
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const { projectId } = await request.json()
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (!project) {
-      return NextResponse.json({ error: 'Project not found' }, { status: 404 })
+      return Response.json({ error: 'Project not found' }, { status: 404 })
     }
 
     const completion = await openai.chat.completions.create({
@@ -86,10 +86,10 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return NextResponse.json({ summary })
+    return Response.json({ summary })
   } catch (error) {
     console.error('AI summarization failed:', error)
-    return NextResponse.json(
+    return Response.json(
       { error: 'Failed to generate summary' },
       { status: 500 }
     )

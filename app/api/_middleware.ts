@@ -1,3 +1,3 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { withClerkMiddleware } from "@clerk/nextjs/server";
 
-export default clerkMiddleware();
+export default withClerkMiddleware();

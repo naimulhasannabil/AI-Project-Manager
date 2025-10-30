@@ -1,8 +1,8 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { authMiddleware } from "@clerk/nextjs";
 
-// Export the Clerk middleware with default configuration
+// Export the Clerk auth middleware with default configuration
 // This will protect all routes and handle authentication
-export default clerkMiddleware({});
+export default authMiddleware({});
 
 // Stop Middleware running on static files but enable on API routes
 export const config = {

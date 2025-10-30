@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest } from 'next/server'
 import { getAuth } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 
@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const { userId } = getAuth(request)
     
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const projects = await prisma.project.findMany({
@@ -26,10 +26,10 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    return NextResponse.json(projects)
+    return Response.json(projects)
   } catch (error) {
     console.error('Failed to fetch projects:', error)
-    return NextResponse.json(
+    return Response.json(
       { error: 'Failed to fetch projects' },
       { status: 500 }
     )
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     const { userId } = getAuth(request)
     
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const body = await request.json()
@@ -61,10 +61,10 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return NextResponse.json(project)
+    return Response.json(project)
   } catch (error) {
     console.error('Failed to create project:', error)
-    return NextResponse.json(
+    return Response.json(
       { error: 'Failed to create project' },
       { status: 500 }
     )

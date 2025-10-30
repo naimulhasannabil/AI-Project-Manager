@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest } from 'next/server'
 import { getAuth } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 import { OpenAI } from 'openai'
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     const { userId } = getAuth(request)
     
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const { taskId } = await request.json()
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (!task) {
-      return NextResponse.json({ error: 'Task not found' }, { status: 404 })
+      return Response.json({ error: 'Task not found' }, { status: 404 })
     }
 
     const completion = await openai.chat.completions.create({
@@ -74,10 +74,10 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return NextResponse.json({ suggestions })
+    return Response.json({ suggestions })
   } catch (error) {
     console.error('AI suggestions failed:', error)
-    return NextResponse.json(
+    return Response.json(
       { error: 'Failed to generate suggestions' },
       { status: 500 }
     )

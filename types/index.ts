@@ -77,6 +77,8 @@ export type CreateTaskInput = {
   status: 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE'
   priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
   estimatedHours?: number | null
+  actualHours?: number | null
+  position?: number
   dueDate?: Date | null
   projectId: string
   userId: string

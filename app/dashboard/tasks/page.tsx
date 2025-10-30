@@ -12,6 +12,7 @@ export default function TasksPage() {
   const { tasks, loadTasks } = useTaskStore()
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
   useEffect(() => {
     loadTasks()
@@ -28,7 +29,7 @@ export default function TasksPage() {
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">All Tasks</h1>
-        <CreateTaskModal />
+        <CreateTaskModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
       </div>
 
       {/* Filters */}
