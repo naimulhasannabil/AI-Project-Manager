@@ -1,16 +1,16 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { useTaskStore } from '@/store/taskStore'
-import { TaskPriority, TaskStatus } from '@prisma/client'
-import { Calendar, Clock } from 'lucide-react'
+import type React from "react"
 
-
+import { useState } from "react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { useTaskStore } from "@/store/taskStore"
+import type { TaskPriority, TaskStatus } from "@prisma/client"
+import { Calendar, Clock } from "lucide-react"
 
 interface CreateTaskModalProps {
   open: boolean
@@ -19,72 +19,75 @@ interface CreateTaskModalProps {
 
 export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    status: 'TODO' as TaskStatus,
-    priority: 'MEDIUM' as TaskPriority,
+    title: "",
+    description: "",
+    status: "TODO" as TaskStatus,
+    priority: "MEDIUM" as TaskPriority,
     estimatedHours: 0,
-    dueDate: '',
+    dueDate: "",
   })
-  
+
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const { createTask } = useTaskStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
-  if (!formData.title.trim()) return
+    e.preventDefault()
+    if (!formData.title.trim()) return
 
-  setIsLoading(true)
-  try {
-    const payload = {
-  title: formData.title,
-  description: formData.description || null,
-  status: formData.status,
-  priority: formData.priority,
-  estimatedHours:
-    formData.estimatedHours !== undefined && formData.estimatedHours !== null
-      ? Number(formData.estimatedHours)
-      : null,
-  dueDate: formData.dueDate ? new Date(formData.dueDate) : null,
-  projectId: 'default-project',
-  userId: 'current-user',
-  assigneeId: null,
-  actualHours: null,
-  position: 0,
-}
+    setIsLoading(true)
+    setError(null)
+    try {
+      const payload = {
+        title: formData.title,
+        description: formData.description || null,
+        status: formData.status,
+        priority: formData.priority,
+        estimatedHours:
+          formData.estimatedHours !== undefined && formData.estimatedHours !== null
+            ? Number(formData.estimatedHours)
+            : null,
+        dueDate: formData.dueDate ? new Date(formData.dueDate) : null,
+        // projectId will be auto-created if not provided
+      }
 
-await createTask(payload)
+      await createTask(payload)
 
-    onOpenChange(false)
-    setFormData({
-      title: '',
-      description: '',
-      status: 'TODO',
-      priority: 'MEDIUM',
-      estimatedHours: 0,
-      dueDate: '',
-    })
-  } catch (error) {
-    console.error('Failed to create task:', error)
-  } finally {
-    setIsLoading(false)
+      onOpenChange(false)
+      setFormData({
+        title: "",
+        description: "",
+        status: "TODO",
+        priority: "MEDIUM",
+        estimatedHours: 0,
+        dueDate: "",
+      })
+    } catch (error) {
+      console.error("Failed to create task:", error)
+      setError("Failed to create task. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
-}
-
-
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px] p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-xl">
         <DialogHeader className="pb-4">
-          <DialogTitle className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Create New Task</DialogTitle>
+          <DialogTitle className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Create New Task
+          </DialogTitle>
         </DialogHeader>
-        
+
+        {error && (
+          <div className="p-3 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 rounded-lg text-sm">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">
-              Task Title *
-            </label>
+            <label className="text-sm font-medium text-foreground">Task Title *</label>
             <Input
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -93,11 +96,9 @@ await createTask(payload)
               required
             />
           </div>
-          
+
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">
-              Description
-            </label>
+            <label className="text-sm font-medium text-foreground">Description</label>
             <Textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -109,9 +110,7 @@ await createTask(payload)
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">
-                Status
-              </label>
+              <label className="text-sm font-medium text-foreground">Status</label>
               <Select
                 value={formData.status}
                 onValueChange={(value: TaskStatus) => setFormData({ ...formData, status: value })}
@@ -129,9 +128,7 @@ await createTask(payload)
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">
-                Priority
-              </label>
+              <label className="text-sm font-medium text-foreground">Priority</label>
               <Select
                 value={formData.priority}
                 onValueChange={(value: TaskPriority) => setFormData({ ...formData, priority: value })}
@@ -181,16 +178,11 @@ await createTask(payload)
           </div>
 
           <div className="flex justify-end space-x-3 pt-4">
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={() => onOpenChange(false)}
-              disabled={isLoading}
-            >
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isLoading}>
               Cancel
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={isLoading || !formData.title.trim()}
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white dark:from-blue-700 dark:to-purple-700 dark:hover:from-blue-800 dark:hover:to-purple-800"
             >
@@ -200,7 +192,7 @@ await createTask(payload)
                   Creating...
                 </>
               ) : (
-                'Create Task'
+                "Create Task"
               )}
             </Button>
           </div>
