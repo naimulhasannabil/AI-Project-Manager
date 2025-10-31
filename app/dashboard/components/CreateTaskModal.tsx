@@ -9,8 +9,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { useTaskStore } from '@/store/taskStore'
 import { TaskPriority, TaskStatus } from '@prisma/client'
 import { Calendar, Clock } from 'lucide-react'
-import type { CreateTaskInput } from '@/types'
-
 
 
 
@@ -77,27 +75,27 @@ await createTask(payload)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold">Create New Task</DialogTitle>
+      <DialogContent className="sm:max-w-[500px] p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-xl">
+        <DialogHeader className="pb-4">
+          <DialogTitle className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Create New Task</DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="text-sm font-medium text-foreground">
               Task Title *
             </label>
             <Input
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="What needs to be done?"
-              className="w-full"
+              className="w-full bg-background text-foreground"
               required
             />
           </div>
           
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label className="text-sm font-medium text-foreground">
               Description
             </label>
             <Textarea
@@ -105,13 +103,13 @@ await createTask(payload)
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Add details, instructions, or context..."
               rows={4}
-              className="resize-none"
+              className="resize-none bg-background text-foreground"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-medium text-foreground">
                 Status
               </label>
               <Select
@@ -131,7 +129,7 @@ await createTask(payload)
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-medium text-foreground">
                 Priority
               </label>
               <Select
@@ -153,7 +151,7 @@ await createTask(payload)
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+              <label className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Clock className="w-4 h-4" />
                 Estimated Hours
               </label>
@@ -164,11 +162,12 @@ await createTask(payload)
                 min="0"
                 step="0.5"
                 placeholder="0"
+                className="bg-background text-foreground"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+              <label className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 Due Date
               </label>
@@ -176,6 +175,7 @@ await createTask(payload)
                 type="date"
                 value={formData.dueDate}
                 onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                className="bg-background text-foreground"
               />
             </div>
           </div>
@@ -192,7 +192,7 @@ await createTask(payload)
             <Button 
               type="submit" 
               disabled={isLoading || !formData.title.trim()}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white dark:from-blue-700 dark:to-purple-700 dark:hover:from-blue-800 dark:hover:to-purple-800"
             >
               {isLoading ? (
                 <>

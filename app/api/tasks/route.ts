@@ -1,18 +1,40 @@
 import { type NextRequest } from 'next/server'
-import { getAuth } from '@clerk/nextjs/server'
+import { getAuth, clerkClient } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
     const { userId } = getAuth(request)
-    
+
     if (!userId) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Map Clerk userId to our local Prisma User.id by looking up clerkId
+    let localUser = await prisma.user.findUnique({ where: { clerkId: userId } })
+    if (!localUser) {
+      // Try to fetch user info from Clerk and create a local user record
+      try {
+        const clerkUser = await clerkClient.users.getUser(userId)
+        const email = clerkUser.emailAddresses?.[0]?.emailAddress || `${userId}@clerk.local`
+        const name = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(' ') || (clerkUser.username ?? undefined)
+        localUser = await prisma.user.create({
+          data: {
+            clerkId: userId,
+            email: email,
+            name: name,
+            avatar: clerkUser.profileImageUrl || undefined,
+          },
+        })
+      } catch (err) {
+        console.error('Failed to fetch/create local user for clerk userId', userId, err)
+        return Response.json({ error: 'User not found' }, { status: 401 })
+      }
+    }
+
     const tasks = await prisma.task.findMany({
       where: {
-        userId,
+        userId: localUser.id,
       },
       include: {
         project: true,
@@ -42,13 +64,34 @@ export async function POST(request: NextRequest) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Map Clerk userId to our local Prisma User.id by looking up clerkId
+    let localUser = await prisma.user.findUnique({ where: { clerkId: userId } })
+    if (!localUser) {
+      try {
+        const clerkUser = await clerkClient.users.getUser(userId)
+        const email = clerkUser.emailAddresses?.[0]?.emailAddress || ''
+        const name = [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(' ') || (clerkUser.username ?? undefined)
+        localUser = await prisma.user.create({
+          data: {
+            clerkId: userId,
+            email: email || `${userId}@clerk.local`,
+            name: name,
+            avatar: clerkUser.profileImageUrl || undefined,
+          },
+        })
+      } catch (err) {
+        console.error('Failed to fetch/create local user for clerk userId', userId, err)
+        return Response.json({ error: 'User not found' }, { status: 401 })
+      }
+    }
+
     const body = await request.json()
     const { title, description, projectId, status, priority, dueDate, estimatedHours } = body
 
     // Get the highest position in the current status column
     const lastTask = await prisma.task.findFirst({
       where: {
-        userId,
+        userId: localUser.id,
         status: status || 'TODO',
       },
       orderBy: {
@@ -65,7 +108,7 @@ export async function POST(request: NextRequest) {
         dueDate: dueDate ? new Date(dueDate) : null,
         estimatedHours,
         position: lastTask ? lastTask.position + 1 : 0,
-        userId,
+        userId: localUser.id,
         projectId,
       },
       include: {

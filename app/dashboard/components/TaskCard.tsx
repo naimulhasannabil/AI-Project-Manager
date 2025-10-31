@@ -54,21 +54,19 @@ export function TaskCard({ task, onDragStart }: TaskCardProps) {
       exit={{ opacity: 0, scale: 0.9 }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 shadow-sm hover:shadow-md transition-all cursor-grab active:cursor-grabbing"
+      className="group bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm hover:shadow-md hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-200 cursor-grab active:cursor-grabbing"
     >
       <div className="flex justify-between items-start mb-3">
-        <div className="flex-1">
-          <h3 className="font-semibold text-sm text-gray-900 dark:text-white mb-1 line-clamp-2">
-            {task.title}
-          </h3>
-          {task.description && (
-            <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">
-              {task.description}
-            </p>
-          )}
-        </div>
-        
-        <div className="relative">
+          <div className="flex-1">
+            <h3 className="font-semibold text-sm text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              {task.title}
+            </h3>
+            {task.description && (
+              <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mb-3 group-hover:text-gray-900 dark:group-hover:text-gray-300 transition-colors">
+                {task.description}
+              </p>
+            )}
+          </div>        <div className="relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
             className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"

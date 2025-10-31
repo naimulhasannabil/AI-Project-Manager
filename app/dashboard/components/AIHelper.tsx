@@ -58,9 +58,9 @@ export function AIHelper() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-primary rounded-full shadow-lg flex items-center justify-center text-white z-50"
+        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center text-white z-50 transition-all duration-200"
       >
-        <MessageCircle className="w-6 h-6" />
+        <MessageCircle className="w-6 h-6 animate-pulse" />
       </motion.button>
 
       <AnimatePresence>
@@ -69,28 +69,29 @@ export function AIHelper() {
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            className="fixed bottom-24 right-6 w-80 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 flex flex-col"
+            className="fixed bottom-24 right-6 w-96 h-[500px] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 flex flex-col backdrop-blur-lg overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 to-purple-600">
               <div className="flex items-center space-x-2">
-                <Bot className="w-5 h-5 text-primary" />
-                <h3 className="font-semibold">AI Assistant</h3>
+                <Bot className="w-5 h-5 text-white" />
+                <h3 className="font-semibold text-white">AI Assistant</h3>
               </div>
               <button
-  onClick={() => setIsOpen(false)}
-  className="p-1 hover:bg-gray-100 rounded"
-  aria-label="Close chat"
->
-  <X className="w-4 h-4" />
-</button>
+                onClick={() => setIsOpen(false)}
+                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                aria-label="Close chat"
+              >
+                <X className="w-4 h-4 text-white" />
+              </button>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+            <div className="flex-1 p-4 space-y-4 overflow-y-auto bg-gray-50 dark:bg-gray-900">
               {messages.length === 0 && (
-                <div className="text-center text-gray-500 text-sm">
-                  <Bot className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                <div className="text-center text-gray-500 dark:text-gray-400 text-sm mt-8">
+                  <Bot className="w-12 h-12 mx-auto mb-4 text-blue-500" />
+                  <p className="font-medium mb-2">Welcome to AI Assistant!</p>
                   <p>How can I help with your project today?</p>
                 </div>
               )}

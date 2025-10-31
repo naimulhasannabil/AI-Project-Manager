@@ -51,7 +51,7 @@ export function Sidebar() {
     <motion.div
       initial={false}
       animate={{ width: collapsed ? 80 : 280 }}
-      className="flex flex-col bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 h-full relative transition-all duration-300"
+      className="flex flex-col bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 h-full relative transition-all duration-300 shadow-sm"
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
@@ -98,8 +98,8 @@ export function Sidebar() {
               className={cn(
                 "flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 group",
                 isActive
-                  ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-blue-500/25"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100",
+                  ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg hover:shadow-xl shadow-blue-500/25 scale-105"
+                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-gray-100 hover:scale-105",
                 collapsed ? "justify-center" : "justify-start"
               )}
             >

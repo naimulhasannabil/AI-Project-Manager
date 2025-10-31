@@ -53,10 +53,17 @@ export function TaskBoard() {
     <>
       <div className="p-6 space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Project Board</h1>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+            <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">Project Board</h1>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                {tasks.length} tasks
+              </span>
+            </div>
+          </div>
           <Button 
             onClick={() => setIsCreateModalOpen(true)}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
           >
             <Plus className="w-4 h-4 mr-2" />
             New Task
@@ -67,7 +74,7 @@ export function TaskBoard() {
           {columns.map((column) => (
             <div
               key={column.id}
-              className="flex flex-col space-y-4"
+              className="flex flex-col space-y-4 min-w-[300px]"
               onDragOver={handleDragOver}
               onDrop={() => handleDrop(column.id as TaskStatus)}
             >
@@ -81,7 +88,7 @@ export function TaskBoard() {
 
               <motion.div
                 layout
-                className="min-h-[500px] space-y-4 p-4 rounded-lg border-2 border-dashed border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+                className="min-h-[500px] space-y-4 p-4 rounded-lg border-2 border-dashed border-border bg-background/50 backdrop-blur-sm transition-colors duration-200"
               >
                 {getTasksByStatus(column.id as TaskStatus).map((task) => (
                   <TaskCard

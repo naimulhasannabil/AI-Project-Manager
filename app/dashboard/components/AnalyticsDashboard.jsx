@@ -46,52 +46,61 @@ export function AnalyticsDashboard() {
   ]
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold">Analytics Dashboard</h1>
+      <div className="p-6 space-y-8">
+      <div className="flex flex-col space-y-2">
+        <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Analytics Dashboard</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Track your team's performance and project progress</p>
+      </div>
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow duration-200 bg-white dark:bg-gray-800">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Velocity</CardTitle>
-            <span className="text-2xl">🚀</span>
+            <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-300">Velocity</CardTitle>
+            <span className="text-2xl bg-blue-50 dark:bg-blue-900/30 p-2 rounded-lg">🚀</span>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics.velocity}</div>
-            <p className="text-xs text-muted-foreground">Tasks completed this week</p>
+            <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              {analytics.velocity}
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Tasks completed this week</p>
+          </CardContent>
+        </Card>        <Card className="hover:shadow-lg transition-shadow duration-200 bg-white dark:bg-gray-800">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-300">Completion Rate</CardTitle>
+            <span className="text-2xl bg-green-50 dark:bg-green-900/30 p-2 rounded-lg">📈</span>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+              {analytics.completionRate.toFixed(1)}%
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Of total tasks completed</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow duration-200 bg-white dark:bg-gray-800">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completion Rate</CardTitle>
-            <span className="text-2xl">📈</span>
+            <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-300">Overdue</CardTitle>
+            <span className="text-2xl bg-yellow-50 dark:bg-yellow-900/30 p-2 rounded-lg">⚠️</span>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics.completionRate.toFixed(1)}%</div>
-            <p className="text-xs text-muted-foreground">Of total tasks completed</p>
+            <div className="text-3xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
+              {analytics.overdueTasks}
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Tasks past deadline</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow duration-200 bg-white dark:bg-gray-800">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Overdue</CardTitle>
-            <span className="text-2xl">⚠️</span>
+            <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-300">Total Hours</CardTitle>
+            <span className="text-2xl bg-purple-50 dark:bg-purple-900/30 p-2 rounded-lg">⏱️</span>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics.overdueTasks}</div>
-            <p className="text-xs text-muted-foreground">Tasks past deadline</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Hours</CardTitle>
-            <span className="text-2xl">⏱️</span>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analytics.totalHours}h</div>
-            <p className="text-xs text-muted-foreground">Estimated work hours</p>
+            <div className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              {analytics.totalHours}h
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Estimated work hours</p>
           </CardContent>
         </Card>
       </div>
