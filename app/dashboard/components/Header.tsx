@@ -97,8 +97,13 @@ export function Header() {
                   afterSignOutUrl="/"
                   appearance={{
                     elements: {
-                      avatarBox: "w-8 h-8"
-                    }
+                      avatarBox: "w-8 h-8",
+                      userButtonPopoverCard: "bg-white dark:bg-gray-900 border dark:border-gray-700",
+                      userButtonPopoverActionButton: "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800",
+                      userButtonPopoverActionButtonText: "text-gray-700 dark:text-gray-200",
+                      userButtonPopoverFooter: "hidden"
+                    },
+                    baseTheme: theme === 'dark' ? undefined : undefined
                   }}
                 />
               </div>

@@ -1,7 +1,6 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
-import { dark } from '@clerk/themes'
 import { ThemeProvider } from './components/ThemeProvider'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -22,21 +21,29 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <ClerkProvider
             appearance={{
-              baseTheme: dark,
               variables: {
-                colorBackground: 'hsl(222.2 84% 4.9%)',
-                colorInputBackground: 'hsl(217.2 32.6% 17.5%)',
-                colorInputText: 'hsl(210 40% 98%)',
-                colorText: 'hsl(210 40% 98%)',
-                colorTextSecondary: 'hsl(215 20.2% 65.1%)',
-                colorPrimary: 'hsl(210 40% 98%)',
-                colorTextOnPrimaryBackground: 'hsl(222.2 47.4% 11.2%)',
-                borderRadius: 'var(--radius)',
+                colorPrimary: '#3b82f6',
+                colorBackground: '#ffffff',
+                colorInputBackground: '#ffffff',
+                colorInputText: '#000000',
+                borderRadius: '0.75rem',
               },
               elements: {
-                formButtonPrimary: 'bg-primary text-primary-foreground hover:bg-primary/90',
-                card: 'bg-card text-card-foreground shadow-sm',
-                footer: 'text-muted-foreground',
+                formButtonPrimary: 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white',
+                card: 'bg-white dark:bg-gray-900 shadow-xl border dark:border-gray-800',
+                headerTitle: 'text-gray-900 dark:text-white',
+                headerSubtitle: 'text-gray-600 dark:text-gray-400',
+                socialButtonsBlockButton: 'border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800',
+                formFieldLabel: 'text-gray-700 dark:text-gray-300',
+                formFieldInput: 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white',
+                footerActionLink: 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300',
+                identityPreviewText: 'text-gray-900 dark:text-white',
+                identityPreviewEditButton: 'text-blue-600 dark:text-blue-400',
+                formFieldInputShowPasswordButton: 'text-gray-600 dark:text-gray-400',
+                otpCodeFieldInput: 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white',
+                formResendCodeLink: 'text-blue-600 dark:text-blue-400',
+                footer: 'bg-white dark:bg-gray-900',
+                footerActionText: 'text-gray-600 dark:text-gray-400',
               }
             }}
           >
