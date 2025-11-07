@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, Legend } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useTaskStore } from '@/store/taskStore'
 
@@ -53,7 +53,7 @@ export function AnalyticsDashboard() {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="hover:shadow-lg transition-shadow duration-200 bg-white dark:bg-gray-800">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-300">Velocity</CardTitle>
@@ -106,37 +106,92 @@ export function AnalyticsDashboard() {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+      <div className="mt-2 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
           <CardHeader>
-            <CardTitle>Task Status Distribution</CardTitle>
+            <CardTitle className="text-gray-900 dark:text-white">Task Status Distribution</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={statusData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="count" fill="#3b82f6" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                <XAxis 
+                  dataKey="name" 
+                  tick={{ fill: '#9ca3af' }}
+                  stroke="#6b7280"
+                />
+                <YAxis 
+                  tick={{ fill: '#9ca3af' }}
+                  stroke="#6b7280"
+                />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: '#1f2937',
+                    border: '1px solid #374151',
+                    borderRadius: '0.5rem',
+                    color: '#f3f4f6'
+                  }}
+                  labelStyle={{ color: '#f3f4f6' }}
+                  itemStyle={{ color: '#f3f4f6' }}
+                />
+                <Bar dataKey="count" fill="#3b82f6" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
           <CardHeader>
-            <CardTitle>Weekly Progress</CardTitle>
+            <CardTitle className="text-gray-900 dark:text-white">Weekly Progress</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={weeklyData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="week" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="completed" stroke="#10b981" strokeWidth={2} />
-                <Line type="monotone" dataKey="created" stroke="#3b82f6" strokeWidth={2} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                <XAxis 
+                  dataKey="week" 
+                  tick={{ fill: '#9ca3af' }}
+                  stroke="#6b7280"
+                />
+                <YAxis 
+                  tick={{ fill: '#9ca3af' }}
+                  stroke="#6b7280"
+                />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: '#1f2937',
+                    border: '1px solid #374151',
+                    borderRadius: '0.5rem',
+                    color: '#f3f4f6'
+                  }}
+                  labelStyle={{ color: '#f3f4f6' }}
+                  itemStyle={{ color: '#f3f4f6' }}
+                />
+                <Legend 
+                  wrapperStyle={{ 
+                    paddingTop: '20px',
+                    color: '#9ca3af'
+                  }}
+                  iconType="line"
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="completed" 
+                  stroke="#10b981" 
+                  strokeWidth={3}
+                  dot={{ fill: '#10b981', r: 5 }}
+                  activeDot={{ r: 7 }}
+                  name="Completed"
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="created" 
+                  stroke="#3b82f6" 
+                  strokeWidth={3}
+                  dot={{ fill: '#3b82f6', r: 5 }}
+                  activeDot={{ r: 7 }}
+                  name="Created"
+                />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
