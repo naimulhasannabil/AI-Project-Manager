@@ -31,23 +31,52 @@ export function AIHelper() {
     }
 
     setMessages(prev => [...prev, userMessage])
+    const currentInput = input
     setInput('')
     setIsLoading(true)
 
     try {
-      // Simulate AI response
-      setTimeout(() => {
-        const aiMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          content: `I can help you with "${input}". This is where the actual OpenAI integration would process your request and generate a response.`,
-          role: 'assistant',
-          timestamp: new Date(),
-        }
-        setMessages(prev => [...prev, aiMessage])
-        setIsLoading(false)
-      }, 1000)
+      // Call the Gemini AI API
+      const response = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: currentInput,
+          conversationHistory: messages.map(msg => ({
+            role: msg.role,
+            content: msg.content,
+          })),
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get AI response')
+      }
+
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: data.response,
+        role: 'assistant',
+        timestamp: new Date(),
+      }
+      
+      setMessages(prev => [...prev, aiMessage])
     } catch (error) {
       console.error('Failed to send message:', error)
+      
+      // Show error message to user
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: 'Sorry, I encountered an error processing your request. Please try again.',
+        role: 'assistant',
+        timestamp: new Date(),
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
       setIsLoading(false)
     }
   }
