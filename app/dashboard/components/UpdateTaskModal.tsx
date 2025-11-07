@@ -1,35 +1,47 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useTaskStore } from "@/store/taskStore"
-import type { TaskPriority, TaskStatus } from "@prisma/client"
+import type { Task, TaskPriority, TaskStatus } from "@prisma/client"
 import { Calendar, Clock } from "lucide-react"
 
-interface CreateTaskModalProps {
+interface UpdateTaskModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  task: Task
 }
 
-export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
+export function UpdateTaskModal({ open, onOpenChange, task }: UpdateTaskModalProps) {
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    status: "TODO" as TaskStatus,
-    priority: "MEDIUM" as TaskPriority,
-    estimatedHours: 0,
-    dueDate: "",
+    title: task.title,
+    description: task.description || "",
+    status: task.status,
+    priority: task.priority,
+    estimatedHours: task.estimatedHours || 0,
+    dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : "",
   })
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { createTask } = useTaskStore()
+  const { updateTask } = useTaskStore()
+
+  // Update form data when task changes
+  useEffect(() => {
+    setFormData({
+      title: task.title,
+      description: task.description || "",
+      status: task.status,
+      priority: task.priority,
+      estimatedHours: task.estimatedHours || 0,
+      dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : "",
+    })
+  }, [task])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,37 +50,22 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
     setIsLoading(true)
     setError(null)
     try {
-      const payload = {
+      const updates = {
         title: formData.title,
         description: formData.description || null,
         status: formData.status,
         priority: formData.priority,
-        estimatedHours:
-          formData.estimatedHours !== undefined && formData.estimatedHours !== null
-            ? Number(formData.estimatedHours)
-            : null,
+        estimatedHours: formData.estimatedHours !== undefined && formData.estimatedHours !== null
+          ? Number(formData.estimatedHours)
+          : null,
         dueDate: formData.dueDate ? new Date(formData.dueDate) : null,
-        actualHours: null,
-        position: 0,
-        userId: "", // This should be set to the current user's ID
-        projectId: "", // This should be set to the current project's ID
-        assigneeId: null,
       }
 
-      await createTask(payload)
-
+      await updateTask(task.id, updates)
       onOpenChange(false)
-      setFormData({
-        title: "",
-        description: "",
-        status: "TODO",
-        priority: "MEDIUM",
-        estimatedHours: 0,
-        dueDate: "",
-      })
     } catch (error) {
-      console.error("Failed to create task:", error)
-      setError("Failed to create task. Please try again.")
+      console.error("Failed to update task:", error)
+      setError("Failed to update task. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -79,10 +76,10 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
       <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto">
         <DialogHeader className="space-y-3 pb-6 border-b border-gray-200 dark:border-gray-700">
           <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Create New Task
+            Update Task
           </DialogTitle>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Add a new task to your project and track its progress
+            Update the task details below
           </p>
         </DialogHeader>
 
@@ -220,12 +217,12 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
               {isLoading ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
-                  Creating...
+                  Updating...
                 </>
               ) : (
                 <>
-                  <span>✨</span>
-                  <span className="ml-2">Create Task</span>
+                  <span>💾</span>
+                  <span className="ml-2">Update Task</span>
                 </>
               )}
             </Button>
