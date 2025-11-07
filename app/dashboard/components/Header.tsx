@@ -49,7 +49,7 @@ export function Header() {
             <div className="flex items-center space-x-3">
               <Button
                 onClick={() => setIsCreateTaskModalOpen(true)}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/25"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25"
                 size="sm"
               >
                 <Plus className="w-4 h-4 mr-2" />

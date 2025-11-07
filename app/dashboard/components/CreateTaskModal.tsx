@@ -81,7 +81,7 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
           <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Create New Task
           </DialogTitle>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Add a new task to your project and track its progress
           </p>
         </DialogHeader>
@@ -96,7 +96,7 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
         <form onSubmit={handleSubmit} className="space-y-6 pt-2">
           {/* Task Title */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1">
+            <label className="text-sm font-semibold text-gray-900 dark:text-gray-300 flex items-center gap-1">
               Task Title
               <span className="text-red-500">*</span>
             </label>
@@ -111,7 +111,7 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
 
           {/* Description */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+            <label className="text-sm font-semibold text-gray-900 dark:text-gray-300">
               Description
             </label>
             <Textarea
@@ -121,7 +121,7 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
               rows={4}
               className="resize-none text-base"
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-gray-600 dark:text-gray-400">
               Optional: Provide more context about this task
             </p>
           </div>
@@ -129,7 +129,7 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
           {/* Status and Priority Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-semibold text-gray-900 dark:text-gray-300">
                 Status
               </label>
               <Select
@@ -149,7 +149,7 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-semibold text-gray-900 dark:text-gray-300">
                 Priority
               </label>
               <Select
@@ -170,10 +170,10 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
           </div>
 
           {/* Time and Date Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-blue-50 dark:bg-gray-800/50 rounded-lg border border-blue-200 dark:border-gray-700">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-blue-500" />
+              <label className="text-sm font-semibold text-gray-900 dark:text-gray-300 flex items-center gap-2">
+                <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 Estimated Hours
               </label>
               <Input
@@ -188,8 +188,8 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-purple-500" />
+              <label className="text-sm font-semibold text-gray-900 dark:text-gray-300 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 Due Date
               </label>
               <Input
